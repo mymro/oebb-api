@@ -172,6 +172,7 @@ tr | track identifier
 trChg | did the track change
 
 rt describes the delay or other status if there is one
+
  Name | description
  --- | --- 
  status | current status; "Ausfall" if canceled
