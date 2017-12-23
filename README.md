@@ -174,7 +174,7 @@ trChg | did the track change
 rt describes the delay or other status if there is one
  Name | description
  --- | --- 
- status | current status| "Ausfall" if canceled
+ status | current status; "Ausfall" if canceled
  dlm | how many minutes too late
  dlt | actual arrival time
  dld | actual arrival date
@@ -183,7 +183,7 @@ rta is very similar to rt I think it describes the delya for the arrival, but I 
 
 Name | description
 --- | --- 
-status | current status; "Ausfall" if canceled then rt too is canceld and rt.status= "Ausfall"
+status | current status  "Ausfall" if canceled then rt too is canceld and rt.status= "Ausfall"
 dlm | never seen it other than empty
 dlt | never seen it other than empty
 
