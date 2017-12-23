@@ -231,7 +231,7 @@ exports.searchStationsNew = function (name){
             .then(getRequest(newStationsSearchUrl, {count: 15, name: name}));
 };
 
-exports.searchStation = function (options){
+exports.searchStations = function (options){
 	return new Promise((resolve, reject) =>
     {
 		request(
@@ -257,17 +257,17 @@ exports.searchStation = function (options){
 	})
 };
 
-exports.journeys = function(from, to, date = datetime.create()){
+exports.getJourneys = function(from, to, authentication, date = datetime.create()){
     let options = Object.assign({}, journeyOptions);
     options.passengers.push(Object.assign({}, journeyAdult));
     options.from=from;
     options.to=to;
     options.datetimeDeparture = date.format("Y-m-dTH:M:S.N");//YYY-MM-DDTHH:MM:SS.mmm
-    return this.getAuthentication().then(postRequest(timetableUrl, options ));
+    return authentication.then(postRequest(timetableUrl, options ));
 };
 
-exports.findPrices = function (ids) {//array
-    return this.getAuthentication().then(getRequest(pricesUrl, {connectionIds:ids}));
+exports.findPrices = function (ids, authentication) {//Very important has to be same authentication as used for journeys
+    return authentication.then(getRequest(pricesUrl, {"connectionIds":ids}));
 };
 
 exports.getStationBoardData = function(options){
