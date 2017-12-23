@@ -3,7 +3,7 @@
 An API to acess train shedules, arrivls/departures and ticketinformation from the OEBB
 
 ## Usage
-### searchStationsNew(`name`)
+### searchStationsNew(name)
 It returns an promise that resolves to an array of possible stations matching `name`
 ```javascript
 searchStationsNew("Wien").then(console.log)
@@ -24,8 +24,8 @@ returns
 ...
 ...]
 ```
-### searchStations(`options`)
-*searchStation* is very similar to *searchStationsNew* it however can take more [`options`](###options) and returns more information. You can call [getStationSearchOptions](##getStationSearchOptions()) to get a prefilled options object.
+### searchStations(options)
+*searchStation* is very similar to *searchStationsNew* it however can take more [`options`](#options) and returns more information. You can call [getStationSearchOptions](##getStationSearchOptions()) to get a prefilled options object.
 ```javascript
 var options = getStationSearchOptions();
 options.S="wien h"
@@ -73,7 +73,7 @@ weight | I am guessing it represents how close a match the station is to the str
 
 ### getStationSearchOptions()
 
-It returns an object containing the options for [searchStations](##searchStations(`options`))
+It returns an object containing the options for [searchStations](#searchStations(options))
 ```javascript
 var options = getStationSearchOptions();
 ```
@@ -93,7 +93,7 @@ REQ0JourneyStopsB | An int greater 0 | the amount of results which are returned
 S | a string | the string to match
 js | boolean | no idea what it does
 
-### getStationBoardData(`options`)
+### getStationBoardData(options)
 It returns a promise resolving to an object containing arrival or depature information for a specific station.
 ```javascript
 var options = oebb.getStationBoardDataOptions();
@@ -137,7 +137,7 @@ returns:
        ati: '20:00',
        tr: '',
        trChg: ,
-       rt: { status: null, dlm: 2, dlt: '19:47' , dld: 23.12.2017 },
+       rt: { status: null, dlm: '2', dlt: '19:47' , dld:'23.12.2017'},
        rta: false },
        ...
        ...
@@ -188,7 +188,7 @@ dlm | never seen it other than empty
 dlt | never seen it other than empty
 
 ### getStationBoardDataOptions()
-returns prefilled options for [getStationBoardData](##getStationBoardData(`options`))
+returns prefilled options for [getStationBoardData](#getStationBoardData(`options`))
 ```javascript
 var options = getStationBoardDataOptions()
 ```
@@ -249,7 +249,7 @@ Flag number | mode of transport
  15 | ?
  16 | ?
  
-### journeys(`from`, `to`, `date`)
+### journeys(from, to, date)
 returns routes `from` `to` at `date`
 
 ```javascript
