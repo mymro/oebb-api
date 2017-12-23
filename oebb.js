@@ -266,7 +266,7 @@ exports.getJourneys = function(from, to, authentication, date = datetime.create(
     return authentication.then(postRequest(timetableUrl, options ));
 };
 
-exports.findPrices = function (ids, authentication) {//Very important has to be same authentication as used for journeys
+exports.findPrices = function (ids, authentication) {//Very important has to be same authentication as used for journeys, therefore add directly to get journeys
     return authentication.then(getRequest(pricesUrl, {"connectionIds":ids}));
 };
 

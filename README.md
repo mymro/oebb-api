@@ -9,7 +9,7 @@ It returns an promise that resolves to an array of possible stations matching `n
 searchStationsNew("Wien").then(console.log)
 ```
 returns
-```json
+```javascript
 [{ number: 1190100,
     longitude: 16372134,
     latitude: 48208547,
@@ -32,7 +32,7 @@ options.S="wien h"
 searchStations(options).then(console.log)
 ```
 It returns an array with matching stations, POIs, etc.
-```json
+```javascript
 [ { value: 'Wien Hbf (U)',
     id: 'A=1@O=Wien Hbf (U)@X=16375326@Y=48185507@U=181@L=001290401@B=1@p=1513853468@',
     extId: '001290401',
@@ -101,7 +101,7 @@ options.evaId=1191601;//Ottakring (Wien)
 oebb.getStationBoardData(options).then(console.log)
 ```
 returns:
-```json
+```javascript
 { headTexts:
    [ 'Zeit',
      'Fahrt',
