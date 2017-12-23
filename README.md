@@ -25,7 +25,7 @@ returns
 ...]
 ```
 ### searchStations(options)
-*searchStation* is very similar to *searchStationsNew* it however can take more [`options`](#options) and returns more information. You can call [getStationSearchOptions](#getStationSearchOptions()) to get a prefilled options object.
+*searchStation* is very similar to *searchStationsNew* it however can take more [`options`](#options) and returns more information. You can call [getStationSearchOptions](#getStationSearchOptions) to get a prefilled options object.
 ```javascript
 var options = getStationSearchOptions();
 options.S="wien h"
@@ -73,7 +73,7 @@ weight | I am guessing it represents how close a match the station is to the str
 
 ### getStationSearchOptions()
 
-It returns an object containing the options for [searchStations](#searchStations(options))
+It returns an object containing the options for [searchStations](#searchStationsoptions)
 ```javascript
 var options = getStationSearchOptions();
 ```
@@ -174,7 +174,7 @@ trChg | did the track change
 rt describes the delay or other status if there is one
  Name | description
  --- | --- 
-status | current status; "Ausfall" if canceled
+status | current status| "Ausfall" if canceled
 dlm | how many minutes too late
 dlt | actual arrival time
 dld | actual arrival date
@@ -188,7 +188,7 @@ dlm | never seen it other than empty
 dlt | never seen it other than empty
 
 ### getStationBoardDataOptions()
-returns prefilled options for [getStationBoardData](#getStationBoardData(options))
+returns prefilled options for [getStationBoardData](#getStationBoardDataoptions)
 ```javascript
 var options = getStationBoardDataOptions()
 ```
