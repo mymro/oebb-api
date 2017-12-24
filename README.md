@@ -2,6 +2,8 @@
 
 A collection of functions fore node.js to acess train shedules, arrivals/departures, station search and ticketinformation from the [OEBB(ÖBB)](https://www.oebb.at) 
 
+npm package coming soon
+
 I had great help from these great ressources
 
  - [HAFAS Fahrplanauskunft API - Sammlung](https://www.administrator.de/wissen/hafas-fahrplanauskunft-api-sammlung-177145.html)
@@ -113,7 +115,7 @@ S | | a string | the string to match
 js |`true` | boolean | no idea what it does
 
 ### getStationBoardData(options)
-It returns a promise resolving to an object containing arrival or depature information for a specific station. You can get a prefilled options object, by calling [getStationBoardDataOptions](#getstationboarddataoptions-1)
+It returns a promise resolving to an object containing arrival or depature information for a specific station. You can get a prefilled [`options`](#options-1) object, by calling [getStationBoardDataOptions](#getstationboarddataoptions-1)
 ```javascript
 const oebb = require('oebb-api');
 
@@ -262,13 +264,11 @@ Flag number | mode of transport
  16 | ?
  
 ### getJourneys(from, to, add_offers, date)
-returns a promise, that resolves to routes `from` `to` at `date`. To add the offers, if they exist, set `add_offers` to `true`. 
+returns a promise, that resolves to routes [`from`](#from-and-to) [`to`](#from-and-to) at `date`. To add the offers, if they exist, set `add_offers` to `true`. 
 `add_offers` is by default false. 
 `date` is a node-datetime object. It has to be imported through npm
 
 ```javascript
-const oebb = require('oebb-api');
-
 oebb.searchStationsNew("Wien Hbf").then((res)=>{
 	from = res[0];
 	oebb.searchStationsNew("Venezia Santa Lucia").then((res)=>{
@@ -279,7 +279,8 @@ oebb.searchStationsNew("Wien Hbf").then((res)=>{
 	})
 });
 ```
-`from` and `to` have to be formated:
+####`from` and `to` 
+the are formated:
 ```javascript
 from/to = { 
 	number: 1190100,
