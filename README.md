@@ -1,6 +1,6 @@
 # OEBB-API (ÖBB-API)
 
-A collection of functions to acess train shedules, arrivals/departures, station search and ticketinformation from the [OEBB(ÖBB)](https://www.oebb.at) 
+A collection of functions fore node.js to acess train shedules, arrivals/departures, station search and ticketinformation from the [OEBB(ÖBB)](https://www.oebb.at) 
 
 npm package coming soon
 
@@ -11,6 +11,10 @@ I had great help from these great ressources
  
 and a [documentation file](https://avb.rmv.de/vergabeverfahren/b-2020-lfd/1-qsv-avb/QSV_Anhang%203e%20%28Anlage%2017_Anh%206%20Realtime%20Datform%20HAFAS%20Parameter_MVU%20170803%29_AVB.pdf/view) I found on the web
 
+## Installation
+```shell
+npm --save install oebb-api
+```
 ## Functions
 
  - [searchStationsNew](#searchstationsnewname)
@@ -23,7 +27,9 @@ and a [documentation file](https://avb.rmv.de/vergabeverfahren/b-2020-lfd/1-qsv-
 ### searchStationsNew(name)
 It returns an promise that resolves to an array of possible stations matching `name`
 ```javascript
-searchStationsNew("Wien").then(console.log)
+const oebb = require('oebb-api');
+
+oebb.searchStationsNew("Wien").then(console.log);
 ```
 returns
 ```javascript
@@ -44,9 +50,11 @@ returns
 ### searchStations(options)
 *searchStation* is very similar to [*searchStationsNew*](#searchstationsnewname) it however can take more [`options`](#options) and returns more information. You can call [getStationSearchOptions](#getstationsearchoptions) to get a prefilled options object.
 ```javascript
-var options = getStationSearchOptions();
-options.S="wien h"
-searchStations(options).then(console.log)
+const oebb = require('oebb-api');
+
+var options = oebb.getStationSearchOptions();
+options.S="wien h";
+oebb.searchStations(options).then(console.log);
 ```
 It returns an array with matching stations, POIs, etc.
 ```javascript
@@ -92,7 +100,9 @@ weight | I am guessing it represents how close a match the station is to the str
 
 It returns an object containing the options for [searchStations](#searchstationsoptions)
 ```javascript
-var options = getStationSearchOptions();
+const oebb = require('oebb-api');
+
+var options = oebb.getStationSearchOptions();
 ```
 
 #### options
@@ -107,9 +117,11 @@ js |`true` | boolean | no idea what it does
 ### getStationBoardData(options)
 It returns a promise resolving to an object containing arrival or depature information for a specific station. You can get a prefilled options object, by calling [getStationBoardDataOptions](#getstationboarddataoptions-1)
 ```javascript
-var options = getStationBoardDataOptions();
-options.evaId=1191601;//Ottakring (Wien) 
-getStationBoardData(options).then(console.log)
+const oebb = require('oebb-api');
+
+var options = oebb.getStationBoardDataOptions();
+options.evaId=1191601;//Ottakring (Wien)
+oebb.getStationBoardData(options).then(console.log);
 ```
 returns:
 ```javascript
@@ -206,7 +218,9 @@ dlt | never seen it other than empty
 ### getStationBoardDataOptions()
 returns prefilled options for [getStationBoardData](#getstationboarddataoptions)
 ```javascript
-var options = getStationBoardDataOptions()
+const oebb = require('oebb-api');
+
+var options = oebb.getStationBoardDataOptions();
 ```
 #### options
 
@@ -276,6 +290,7 @@ from/to = {
 ```
 
  This returns for example (`connections` describes the journey and `offer` contains the information about the price etc.):
+ (The console output will hide most of it, but it is there)
 ```javascript
 {
 	"connections": [
