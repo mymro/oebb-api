@@ -2,7 +2,7 @@
 
 A collection of functions fore node.js to acess train shedules, arrivals/departures, station search and ticketinformation from the [OEBB(ÖBB)](https://www.oebb.at) 
 
-I had great help from these great ressources
+I had a lot of help help from these great ressources
 
  - [HAFAS Fahrplanauskunft API - Sammlung](https://www.administrator.de/wissen/hafas-fahrplanauskunft-api-sammlung-177145.html)
  - [Austrian Federal Railways (ÖBB) API client by juliuste](https://github.com/juliuste/oebb)
@@ -267,10 +267,12 @@ returns a promise, that resolves to routes [`from`](#from-and-to) [`to`](#from-a
 `date` is a node-datetime object. It has to be imported through npm
 
 ```javascript
+const oebb = require('oebb-api');
+
 oebb.searchStationsNew("Wien Hbf").then((res)=>{
-	from = res[0];
+	var from = res[0];
 	oebb.searchStationsNew("Venezia Santa Lucia").then((res)=>{
-		to=res[0];
+		var to=res[0];
 		oebb.getJourneys(from, to, true).then((res)=>{
             console.log(res);
         });
