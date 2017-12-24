@@ -107,9 +107,9 @@ js |`true` | boolean | no idea what it does
 ### getStationBoardData(options)
 It returns a promise resolving to an object containing arrival or depature information for a specific station. You can get a prefilled options object, by calling [getStationBoardDataOptions](#getstationboarddataoptions-1)
 ```javascript
-var options = oebb.getStationBoardDataOptions();
+var options = getStationBoardDataOptions();
 options.evaId=1191601;//Ottakring (Wien) 
-oebb.getStationBoardData(options).then(console.log)
+getStationBoardData(options).then(console.log)
 ```
 returns:
 ```javascript
