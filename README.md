@@ -1,8 +1,25 @@
-# OEBB-API
+# OEBB-API (ÖBB-API)
 
-An API to acess train shedules, arrivls/departures and ticketinformation from the OEBB
+An API to acess train shedules, arrivals/departures, station search and ticketinformation for the [OEBB](https://www.oebb.at) 
 
-## Usage
+npm package coming soon
+
+I had great help from these great ressources
+
+ - [HAFAS Fahrplanauskunft API - Sammlung](https://www.administrator.de/wissen/hafas-fahrplanauskunft-api-sammlung-177145.html)
+ - [Austrian Federal Railways (ÖBB) API client by juliuste](https://github.com/juliuste/oebb)
+ 
+and a [documentation file](https://avb.rmv.de/vergabeverfahren/b-2020-lfd/1-qsv-avb/QSV_Anhang%203e%20%28Anlage%2017_Anh%206%20Realtime%20Datform%20HAFAS%20Parameter_MVU%20170803%29_AVB.pdf/view) I found on the web
+
+## Functions
+
+ - [searchStationsNew](#searchstationsnewname)
+ - [searchStations](#searchstationsoptions)
+ - [getJourneys](#getjourneysfrom-to-addoffers-date)
+ - [getStationBoardData](#getstationboarddataoptions)
+ - [getStationBoardDataOptions](#getstationboarddataoptions-1)
+ - [getStationSearchOptions](#getstationsearchoptions)
+
 ### searchStationsNew(name)
 It returns an promise that resolves to an array of possible stations matching `name`
 ```javascript
@@ -25,7 +42,7 @@ returns
 ...]
 ```
 ### searchStations(options)
-*searchStation* is very similar to *searchStationsNew* it however can take more [`options`](#options) and returns more information. You can call [getStationSearchOptions](#getstationsearchoptions) to get a prefilled options object.
+*searchStation* is very similar to [*searchStationsNew*](#searchstationsnewname) it however can take more [`options`](#options) and returns more information. You can call [getStationSearchOptions](#getstationsearchoptions) to get a prefilled options object.
 ```javascript
 var options = getStationSearchOptions();
 options.S="wien h"
@@ -61,8 +78,8 @@ Name | description
 --- | ---
 value: | name of the station 
 id  | no idea
-extId | used in other queries; same as number 
-type | number representing the type
+extId | used in other queries; same as number (not quite shure if the really are the same all the time) 
+type | int representing the type
 typeStr | the type as string
 xcoord | longitude
 ycoord |latitude
@@ -77,24 +94,18 @@ It returns an object containing the options for [searchStations](#searchstations
 ```javascript
 var options = getStationSearchOptions();
 ```
-Name | default value
---- | ---
-REQ0JourneyStopsS0A | 1
-REQ0JourneyStopsB | 12
-S | 
-js |`true`
 
 #### options
 
-Name | value | description
---- | --- |  --- |
-REQ0JourneyStopsS0A | An int between 1 and 255. | It selects the type of station to return e.g. 1 is [Bhf/Hst]
-REQ0JourneyStopsB | An int greater 0 | the amount of results which are returned
-S | a string | the string to match
-js | boolean | no idea what it does
+Name | default value | value | description
+--- | --- | --- |  --- |
+REQ0JourneyStopsS0A | 1 |  An int between 1 and 255. | It selects the type of station to return e.g. 1 is [Bhf/Hst]
+REQ0JourneyStopsB | 12 | An int greater 0 | the amount of results which are returned
+S | | a string | the string to match
+js |`true` | boolean | no idea what it does
 
 ### getStationBoardData(options)
-It returns a promise resolving to an object containing arrival or depature information for a specific station.
+It returns a promise resolving to an object containing arrival or depature information for a specific station. You can get a prefilled options object, by calling [getStationBoardDataOptions](#getstationboarddataoptions-1)
 ```javascript
 var options = oebb.getStationBoardDataOptions();
 options.evaId=1191601;//Ottakring (Wien) 
@@ -146,6 +157,8 @@ returns:
   maxJ: 18 }
 
 ```
+#### element description
+##### general:
 Name | description
 --- | --- 
 headTexts | headings for arrivals depatures screen
@@ -157,7 +170,7 @@ iconProductsSubPath | ?
 rtInfo | ?
 maxJ | number of returned entries -1
 
-journey:
+##### journey:
 
 Name | description
 --- | --- 
@@ -171,7 +184,8 @@ ati | wehn arrivals depature time from first stop ; when depatures expected time
 tr | track identifier
 trChg | did the track change
 
-rt describes the delay or other status if there is one
+##### rt :
+it describes the delay or other status if there is one. If there is one it contains an object formated as follows:
 
  Name | description
  --- | --- 
@@ -180,7 +194,8 @@ rt describes the delay or other status if there is one
  dlt | actual arrival time
  dld | actual arrival date
 
-rta is very similar to rt I think it describes the delya for the arrival, but I am not certain
+##### rta 
+it is very similar to rt I think it describes the delay for the arrival, but I am not certain.
 
 Name | description
 --- | --- 
@@ -193,39 +208,23 @@ returns prefilled options for [getStationBoardData](#getstationboarddataoptions)
 ```javascript
 var options = getStationBoardDataOptions()
 ```
-Name | default value
---- | ---
-L | vs_scotty.vs_liveticker
-evaId | empty
-dirInput | empty
-boardType | dep 
-time | current time
-productsFilter | 1111111111111111
-additionalTime | 0,
-maxJourneys | 19
-outputMode | tickerDataOnly 
-start|yes
-selectDate | period 
-dateBegin| current date
-dateEnd| current date
-
 #### options
 
-Name | value | description
---- | --- | ---
-L | vs_scotty.vs_liveticker | ?
-evaId | integer | Id of station extId or number from searchStations or searchStationsNew
-dirInput | integer | Id of Station in which transportation is heading extId or number from searchStations or searchStationsNew. If it is set only trains which actualy stop at the station specified with dirInput are shown
-boardType | dep/arr | depatures or arrivals
-time | HH:MM | time from when to start looking
-productsFilter | 1111111111111111 | selects modes of transportation see below for more information
-additionalTime | integer | in minute. Is added to time
-maxJourneys | 19 | max of returned stations
-outputMode | tickerDataOnly | ?
-start | yes | wheter to start query
-selectDate | period/tody | selects mode; if tody dateBegin and dateEnd are ignored. 
-dateBegin| current date | start day for lookup ignored if selectDate=today
-dateEnd| current date | end date for lookup ignored if selectDate=today
+Name | default value | values | description
+--- | --- | --- | ---
+L | vs_scotty.vs_liveticker|  vs_scotty.vs_liveticker | ?
+evaId | empty| integer | Id of station; extId or number from [searchStationsNew](#searchstationsnewname) or [searchStations](#searchstationsoptions)
+dirInput | empty| integer | Id of Station in which transportation is heading; extId or number f from [searchStationsNew](#searchstationsnewname) or [searchStations](#searchstationsoptions). If it is set only trains which actually stop at the station specified with dirInput are shown
+boardType | dep | dep/arr | depatures or arrivals
+time | current time| HH:MM | time from when to start looking
+productsFilter | 1111111111111111 | binary flags? | selects modes of transportation see [below](#productsfilter) for more information
+additionalTime | 0 | integer | in minute. Is added to time
+maxJourneys | 19 | integer | max of returned stations
+outputMode | tickerDataOnly | tickerDataOnly | ?
+start |yes| yes/no | wheter to start query
+selectDate | period | period/tody | selects mode; if tody dateBegin and dateEnd are ignored. 
+dateBegin| current date | String dd.mm.YYYY | start day for lookup ignored if selectDate=today
+dateEnd | current date| String dd.mm.YYYY | end date for lookup ignored if selectDate=today
 
 ##### productsFilter
 slects which modes of transports should be listed
@@ -250,9 +249,107 @@ Flag number | mode of transport
  15 | ?
  16 | ?
  
-### journeys(from, to, date)
-returns routes `from` `to` at `date`
+### getJourneys(from, to, add_offers, date)
+returns a promise, that resolves to routes `from` `to` at `date`. To add the offers, if they exist, set `add_offers` to `true`. 
+`add_offers` is by default false. 
+`date` is a node-datetime object. It has to be imported through npm
 
 ```javascript
+oebb.searchStationsNew("Wien Hbf").then((res)=>{
+	from = res[0];
+	oebb.searchStationsNew("Venezia Santa Lucia").then((res)=>{
+		to=res[0];
+		oebb.getJourneys(from, to, true).then((res)=>{
+            console.log(res);
+        });
+	})
+});
+```
+`from` and `to` have to be formated:
+```javascript
+from/to = { 
+	number: 1190100,
+    longitude: 16372134,
+    latitude: 48208547,
+    name: 'Wien',
+};
+```
 
+ This returns for example (`connections` describes the journey and `offer` contains the information about the price etc.):
+```javascript
+{
+	"connections": [
+		{
+			"connection": {
+				"id": "fb8a994b473d2931b32583890559a1dcadd736a0f2016132f6d1628b8b1d68fd",
+				"from": {
+					"name": "Wien Hbf",
+					"esn": 8103000,
+					"departure": "2017-12-24T06:25:00.000",
+					"departurePlatform": "7",
+					"showAsResolvedMetaStation": false
+				},
+				"to": {
+					"name": "Venezia Santa Lucia",
+					"esn": 8300094,
+					"arrival": "2017-12-24T14:05:00.000",
+					"showAsResolvedMetaStation": false
+				},
+				"sections": [
+					{
+						"from": {
+							"name": "Wien Hbf",
+							"esn": 8103000,
+							"departure": "2017-12-24T06:25:00.000",
+							"departurePlatform": "7"
+						},
+						"to": {
+							"name": "Venezia Santa Lucia",
+							"esn": 8300094,
+							"arrival": "2017-12-24T14:05:00.000"
+						},
+						"duration": 27600000,
+						"category": {
+							"name": "RJ",
+							"number": "131",
+							"displayName": "RJ",
+							"longName": {
+								"de": "Railjet",
+								"en": "Railjet",
+								"it": "Railjet"
+							},
+							"backgroundColor": "#ffffff",
+							"fontColor": "#222222",
+							"barColor": "#ab0020",
+							"place": {
+								"de": "Bahnsteig",
+								"en": "Platform",
+								"it": "Banchina"
+							},
+							"assistantIconId": "zugAssistant",
+							"train": true,
+							"backgroundColorDisabled": "#F0F0F0",
+							"fontColorDisabled": "#878787",
+							"barColorDisabled": "#878787"
+						},
+						"type": "journey",
+						"hasRealtime": false
+					}
+				],
+				"switches": 0,
+				"duration": 27600000
+			},
+			"offer": {
+				"connectionId": "fb8a994b473d2931b32583890559a1dcadd736a0f2016132f6d1628b8b1d68fd",
+				"price": 94.6,
+				"offerError": false,
+				"firstClass": false,
+				"availabilityState": "available"
+			}
+		},
+		...
+		...
+		...
+	}
+]
 ```

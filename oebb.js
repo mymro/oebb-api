@@ -164,7 +164,7 @@ function authenticationRequest() {
     });
 }
 
-exports.getAuthentication = function(retries=3){
+getAuthentication = function(retries=3){
     return(retry(authenticationRequest, {retries: retries}));
 };
 
@@ -227,8 +227,7 @@ postRequest = (url, body) => (authentication) => {
 };
 
 exports.searchStationsNew = function (name){
-        return this.getAuthentication()
-            .then(getRequest(newStationsSearchUrl, {count: 15, name: name}));
+        return getAuthentication().then(getRequest(newStationsSearchUrl, {count: 15, name: name}));
 };
 
 exports.searchStations = function (options){
@@ -257,17 +256,28 @@ exports.searchStations = function (options){
 	})
 };
 
-exports.getJourneys = function(from, to, authentication, date = datetime.create()){
+exports.getJourneys = async function(from, to, add_offers=false, date = datetime.create()){//async function return promises
+    let authentication = getAuthentication();
     let options = Object.assign({}, journeyOptions);
     options.passengers.push(Object.assign({}, journeyAdult));
     options.from=from;
     options.to=to;
     options.datetimeDeparture = date.format("Y-m-dTH:M:S.N");//YYY-MM-DDTHH:MM:SS.mmm
-    return authentication.then(postRequest(timetableUrl, options ));
+    let result = authentication.then(postRequest(timetableUrl, options ));
+    if(add_offers){
+        let connections = await result.then();
+        connections = connections.connections;
+        let ids = connections.map((x) => x.id);
+        let offers = await authentication.then(findPrices(ids));
+        offers = offers.offers;
+        return {connections: connections.map((connection) => ({connection, offer: offers.find((offer) => offer.connectionId == connection.id)}))};
+    }else {
+        return result;
+    }
 };
 
-exports.findPrices = function (ids, authentication) {//Very important has to be same authentication as used for journeys, therefore add directly to get journeys
-    return authentication.then(getRequest(pricesUrl, {"connectionIds":ids}));
+findPrices = (ids) => (authentication) => {//Very important has to be same authentication as used for journeys, therefore add directly to get journeys
+    return getRequest(pricesUrl, {"connectionIds":ids})(authentication);
 };
 
 exports.getStationBoardData = function(options){
