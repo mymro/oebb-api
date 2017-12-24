@@ -267,6 +267,8 @@ returns a promise, that resolves to routes `from` `to` at `date`. To add the off
 `date` is a node-datetime object. It has to be imported through npm
 
 ```javascript
+const oebb = require('oebb-api');
+
 oebb.searchStationsNew("Wien Hbf").then((res)=>{
 	from = res[0];
 	oebb.searchStationsNew("Venezia Santa Lucia").then((res)=>{
