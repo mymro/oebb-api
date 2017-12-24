@@ -2,8 +2,6 @@
 
 A collection of functions fore node.js to acess train shedules, arrivals/departures, station search and ticketinformation from the [OEBB(ÖBB)](https://www.oebb.at) 
 
-npm package coming soon
-
 I had great help from these great ressources
 
  - [HAFAS Fahrplanauskunft API - Sammlung](https://www.administrator.de/wissen/hafas-fahrplanauskunft-api-sammlung-177145.html)
