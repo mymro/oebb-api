@@ -1,6 +1,6 @@
 # OEBB-API (ÖBB-API)
 
-An API to acess train shedules, arrivals/departures, station search and ticketinformation for the [OEBB](https://www.oebb.at) 
+A collection of functions to acess train shedules, arrivals/departures, station search and ticketinformation from the [OEBB(ÖBB)](https://www.oebb.at) 
 
 npm package coming soon
 

@@ -137,9 +137,6 @@ const journeyYoungster={
     "birthDate": "2001-12-23T13:26:47.281"
 };
 
-//zuginformation abfragen mittels get
-//route planen
-
 function authenticationRequest() {
     return new Promise((resolve, reject)=>
     {
@@ -264,6 +261,7 @@ exports.getJourneys = async function(from, to, add_offers=false, date = datetime
     options.to=to;
     options.datetimeDeparture = date.format("Y-m-dTH:M:S.N");//YYY-MM-DDTHH:MM:SS.mmm
     let result = authentication.then(postRequest(timetableUrl, options ));
+
     if(add_offers){
         let connections = await result.then();
         connections = connections.connections;
