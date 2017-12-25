@@ -253,7 +253,7 @@ exports.searchStations = function (options){
 	})
 };
 
-exports.getJourneys = async function(from, to, add_offers=false, date = datetime.create()){//async function return promises
+exports.getJourneys = function(from, to, add_offers=false, date = datetime.create()){
     let authentication = getAuthentication();
     let options = Object.assign({}, journeyOptions);
     options.passengers.push(Object.assign({}, journeyAdult));
@@ -263,12 +263,16 @@ exports.getJourneys = async function(from, to, add_offers=false, date = datetime
     let result = authentication.then(postRequest(timetableUrl, options ));
 
     if(add_offers){
-        let connections = await result.then();
-        connections = connections.connections;
-        let ids = connections.map((x) => x.id);
-        let offers = await authentication.then(findPrices(ids));
-        offers = offers.offers;
-        return {connections: connections.map((connection) => ({connection, offer: offers.find((offer) => offer.connectionId == connection.id)}))};
+            result.then((res)=>{
+                let connections = res;
+                connections = connections.connections;
+                let ids = connections.map((x) => x.id);
+                authentication.then((res)=>{
+                    let offers= findPrices(ids)(res);
+                    offers = offers.offers;
+                    return {connections: connections.map((connection) => ({connection, offer: offers.find((offer) => offer.connectionId == connection.id)}))};
+                });
+        });
     }else {
         return result;
     }
@@ -293,7 +297,7 @@ exports.getStationBoardData = function(options){
                     body = body.split(/ = (.+)/)[1];
                     body = h2p(body);
                     body = JSON.parse(body);
-                    if(body.journey && body.journey.length > 0)
+                    if(body.headTexts)
                     {
                         resolve(body);
                     }else {

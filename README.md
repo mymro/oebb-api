@@ -280,7 +280,7 @@ oebb.searchStationsNew("Wien Hbf").then((res)=>{
 });
 ```
 ####`from` and `to` 
-the are formated:
+they are formated:
 ```javascript
 from/to = { 
 	number: 1190100,

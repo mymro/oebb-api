@@ -11,7 +11,7 @@
     "request": "^2.83.0",
     "url": "^0.11.0"
   },
-  "version": "1.0.4",
+  "version": "1.0.5",
   "main": "oebb.js",
   "devDependencies": {},
   "scripts": {
