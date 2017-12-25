@@ -154,7 +154,7 @@ function authenticationRequest() {
                 if(body.accessToken && body.accessToken !== ""){
                     resolve(merge(body, {cookie: cookie.parse(response.headers['set-cookie'][0])['ts-cookie']}));
                 }else{
-                    reject(body)
+                    reject(body)//TODO proper reject
                 }
             }
         );
@@ -186,7 +186,7 @@ getRequest = (url, params) => (authentication) => {
             (error, response, body) =>
             {
                 if(error){
-                    reject(error);
+                    reject(error)//TODO proper reject;
                 }else {
                     resolve(body);
                 }
@@ -214,7 +214,7 @@ postRequest = (url, body) => (authentication) => {
             },
             (error, response, body) => {
                 if(error){
-                    reject(error);
+                    reject(error)//TODO proper reject;
                 }else {
                     resolve(body);
                 }
@@ -242,11 +242,11 @@ exports.searchStations = function (options){
                     body = body.split(/=(.+)/)[1];
                     body = body.split(/(;SLs.+)/)[0];
                     body = JSON.parse(body).suggestions;
-                    if(body.length > 0)
+                    if(!error && body && body.length > 0)
                     {
                         resolve(body);
                     }else {
-                        reject(error, body);
+                        reject(body)//TODO proper reject;
                     }
                 }
 		);
@@ -254,28 +254,32 @@ exports.searchStations = function (options){
 };
 
 exports.getJourneys = function(from, to, add_offers=false, date = datetime.create()){
-    let authentication = getAuthentication();
-    let options = Object.assign({}, journeyOptions);
-    options.passengers.push(Object.assign({}, journeyAdult));
-    options.from=from;
-    options.to=to;
-    options.datetimeDeparture = date.format("Y-m-dTH:M:S.N");//YYY-MM-DDTHH:MM:SS.mmm
-    let result = authentication.then(postRequest(timetableUrl, options ));
 
-    if(add_offers){
-            result.then((res)=>{
-                let connections = res;
-                connections = connections.connections;
+    return new Promise((resolve, reject)=>{
+
+        let authentication = getAuthentication();
+        let options = Object.assign({}, journeyOptions);
+        options.passengers.push(Object.assign({}, journeyAdult));
+        options.from=from;
+        options.to=to;
+        options.datetimeDeparture = date.format("Y-m-dTH:M:S.N");//YYY-MM-DDTHH:MM:SS.mmm
+        let journeys = authentication.then(postRequest(timetableUrl, options ));
+
+        if(add_offers){
+            journeys.then((journeys_res)=>{
+                let connections = journeys_res.connections;
                 let ids = connections.map((x) => x.id);
-                authentication.then((res)=>{
-                    let offers= findPrices(ids)(res);
-                    offers = offers.offers;
-                    return {connections: connections.map((connection) => ({connection, offer: offers.find((offer) => offer.connectionId == connection.id)}))};
-                });
-        });
-    }else {
-        return result;
-    }
+                authentication.then((auth)=>{
+                    findPrices(ids)(auth).then((offers)=>{
+                        offers = offers.offers;
+                        resolve({connections: connections.map((connection) => ({connection, offer: offers.find((offer) => offer.connectionId == connection.id)}))});
+                    }).catch(reject);
+                }).catch(reject);
+            }).catch(reject);
+        }else {
+            resolve(journeys);
+        }
+    });
 };
 
 findPrices = (ids) => (authentication) => {//Very important has to be same authentication as used for journeys, therefore add directly to get journeys
@@ -297,7 +301,7 @@ exports.getStationBoardData = function(options){
                     body = body.split(/ = (.+)/)[1];
                     body = h2p(body);
                     body = JSON.parse(body);
-                    if(body.headTexts)
+                    if(!error && body.headTexts)
                     {
                         resolve(body);
                     }else {
