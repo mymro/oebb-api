@@ -15,7 +15,7 @@ const newStationsSearchUrl = url.parse("https://tickets.oebb.at/api/hafas/v1/sta
 const pricesUrl = url.parse("https://tickets.oebb.at/api/offer/v1/prices");
 
 const stationSearchOptions={
-	REQ0JourneyStopsS0A:1,//typ der antowort (addresse, poi, usw.) 255 jedern typ zulassen 1 ist bahnhof
+	REQ0JourneyStopsS0A:1,//typ der antowort (addresse, poi, usw.) 255 jedern typ zulassen 1 ist bahnhof/haltestelle
 	REQ0JourneyStopsB:12, //wieviel antworten
 	S:"",//suchwort
 	js:true//macht nichts
