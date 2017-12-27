@@ -151,11 +151,14 @@ function authenticationRequest() {
             },
             (error, response, body) =>
             {
+                if(error){
+                    reject(error, {})
+                }
                 if(body.accessToken && body.accessToken !== ""){
                     resolve(merge(body, {cookie: cookie.parse(response.headers['set-cookie'][0])['ts-cookie']}));
                 }else{
-                    reject(body)//TODO proper reject
-                }
+                    reject("got no access token", body)
+    }
             }
         );
     });
@@ -186,7 +189,7 @@ getRequest = (url, params) => (authentication) => {
             (error, response, body) =>
             {
                 if(error){
-                    reject(error)//TODO proper reject;
+                    reject(error, {});
                 }else {
                     resolve(body);
                 }
@@ -214,7 +217,7 @@ postRequest = (url, body) => (authentication) => {
             },
             (error, response, body) => {
                 if(error){
-                    reject(error)//TODO proper reject;
+                    reject(error, {});
                 }else {
                     resolve(body);
                 }
@@ -239,14 +242,17 @@ exports.searchStations = function (options){
             },
             (error, response, body) =>
                 {
+                    if(error){
+                        reject(error, {});
+                    }
                     body = body.split(/=(.+)/)[1];
                     body = body.split(/(;SLs.+)/)[0];
                     body = JSON.parse(body).suggestions;
-                    if(!error && body && body.length > 0)
+                    if(body && body.length > 0)
                     {
                         resolve(body);
                     }else {
-                        reject(body)//TODO proper reject;
+                        reject("body wrong formatted in search stations", body);
                     }
                 }
 		);
@@ -297,15 +303,18 @@ exports.getStationBoardData = function(options){
             },
             (error, response, body) =>
                 {
+                    if(error){
+                        reject(error, {});
+                    }
                     body = body.replace(/[\n\r]/g, "");
                     body = body.split(/ = (.+)/)[1];
                     body = h2p(body);
                     body = JSON.parse(body);
-                    if(!error && body.headTexts)
+                    if(body.headTexts)
                     {
                         resolve(body);
                     }else {
-                        reject(error, body);
+                        reject("wrong body in station board data", body);
                     }
                 }
             );
