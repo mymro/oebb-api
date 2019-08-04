@@ -155,7 +155,7 @@ function authenticationRequest() {
                     reject(error, {})
                 }
                 if(body.accessToken && body.accessToken !== ""){
-                    resolve(merge(body, {cookie: cookie.parse(response.headers['set-cookie'][0])['ts-cookie']}));
+                    resolve(merge(body, {cookie: cookie.parse(response.headers.accesstoken)}));
                 }else{
                     reject("got no access token", body)
     }
