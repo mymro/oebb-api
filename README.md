@@ -255,7 +255,7 @@ Flag number | mode of transport
  9 | subway
  10 | tram
  11 | ?
- 12 | ?
+ 12 | AST
  13 | Westbahn
  14 | ?
  15 | ?
